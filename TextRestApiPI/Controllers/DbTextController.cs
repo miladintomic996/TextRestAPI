@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using NetCoreRepositoryAndUnitOfWorkPattern.Data.Models;
 using NetCoreRepositoryAndUnitOfWorkPattern.Service.Services;
 
@@ -15,10 +16,13 @@ namespace TextRestAPI.Controllers
     {
 
         private readonly IDbTextService _dbTextService;
+        private readonly ILogger _logger;
 
-        public DbTextController(IDbTextService dbTextService)
+
+        public DbTextController(IDbTextService dbTextService, ILogger<DbTextController> logger)
         {
             this._dbTextService = dbTextService;
+            this._logger = logger;
         }
 
         [HttpGet("all")]
@@ -30,7 +34,7 @@ namespace TextRestAPI.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _logger.LogError(ex.Message);
                 return NoContent();
             }
         }

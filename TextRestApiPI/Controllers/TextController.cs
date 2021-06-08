@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using TextRestAPI.Model;
@@ -10,11 +11,13 @@ namespace TextRestAPI.Controllers
     [ApiController]
     public class TextController : Controller
     {
-        private readonly ITextService textService;
+        private readonly ITextService _textService;
+        private readonly ILogger _logger;
 
-        public TextController(ITextService textService)
+        public TextController(ITextService textService, ILogger<TextController> logger)
         {
-            this.textService = textService;
+            this._textService = textService;
+            this._logger = logger;
         }
 
         [HttpPost]
@@ -23,11 +26,12 @@ namespace TextRestAPI.Controllers
         {
             try
             {
-                return Ok(textService.CountWords(text));
+                _logger.LogError("test");
+                return Ok(_textService.CountWords(text));
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _logger.LogError(ex.Message);
                 return NoContent();
             }
 
@@ -38,11 +42,11 @@ namespace TextRestAPI.Controllers
         {
             try
             {
-                return Ok(textService.CountWordsDb(id).Result);
+                return Ok(_textService.CountWordsDb(id).Result);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _logger.LogError(ex.Message);
                 return NoContent();
             }
 
@@ -53,11 +57,11 @@ namespace TextRestAPI.Controllers
         {
             try
             {
-                return Ok(textService.CountWordsFile(filename));
+                return Ok(_textService.CountWordsFile(filename));
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _logger.LogError(ex.Message);
                 return NoContent();
             }
         }
