@@ -22,9 +22,17 @@ namespace TextRestAPI.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<List<Text>> GetFromDb(int id)
+        public async Task<IActionResult> GetFromDb(int id)
         {
-            return _dbTextService.GetAllTextsAsync().Result;
+            try
+            {
+                return Ok(_dbTextService.GetAllTextsAsync().Result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return NoContent();
+            }
         }
     }
 }

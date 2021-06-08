@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 using TextRestAPI.Model;
 using TextRestAPI.Service;
 
@@ -17,21 +19,47 @@ namespace TextRestAPI.Controllers
 
         [HttpPost]
         [Consumes("text/plain")]
-        public TextResponse Post([FromBody] string text)
+        public async Task<IActionResult> Post([FromBody] string text)
         {
-            return textService.CountWords(text);
+            try
+            {
+                return Ok(textService.CountWords(text));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return NoContent();
+            }
+
         }
 
         [HttpGet("db/{id}")]
-        public TextResponse GetFromDb(int id)
+        public async Task<IActionResult> GetFromDb(int id)
         {
-            return textService.CountWordsDb(id).Result;
+            try
+            {
+                return Ok(textService.CountWordsDb(id).Result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return NoContent();
+            }
+
         }
 
         [HttpGet("file/{filename}")]
-        public TextResponse GetFromFile(string filename)
+        public async Task<IActionResult> GetFromFile(string filename)
         {
-            return textService.CountWordsFile(filename);
+            try
+            {
+                return Ok(textService.CountWordsFile(filename));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return NoContent();
+            }
         }
     }
 }
